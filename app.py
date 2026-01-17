@@ -1,5 +1,3 @@
-# Refactored Flask application with reorganized structure and different styling/structure
-
 from flask import Flask, render_template_string, request, flash, redirect, url_for, session
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, SelectField, TextAreaField
@@ -40,18 +38,42 @@ MAIN_TEMPLATE = """
 <!doctype html>
 <html lang="cs">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Formulář</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body { background:#f4f6f9; }
-        .card { border-radius:18px; box-shadow:0 10px 30px rgba(0,0,0,.08); }
-        .brand { font-weight:700; }
-    </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Formulář</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+    body { 
+        font-family: 'Inter', sans-serif; 
+        background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+    }
+    .card {
+        border-radius: 20px;
+        box-shadow: 0 15px 40px rgba(0,0,0,0.08);
+        border: none;
+    }
+    .brand { font-weight: 700; color: #4e73df; }
+    .btn-primary { 
+        background: linear-gradient(90deg, #4e73df 0%, #1cc88a 100%);
+        border: none;
+    }
+    .btn-primary:hover { 
+        background: linear-gradient(90deg, #1cc88a 0%, #4e73df 100%);
+    }
+    .form-control:focus { 
+        border-color: #4e73df;
+        box-shadow: 0 0 5px rgba(78,115,223,0.5);
+    }
+    .alert-success {
+        background-color: #d4edda;
+        color: #155724;
+        border-radius: 10px;
+    }
+</style>
 </head>
 <body>
-<nav class="navbar bg-white shadow-sm">
+<nav class="navbar bg-white shadow-sm mb-4">
     <div class="container d-flex justify-content-between">
         <a href="{{ url_for('index') }}" class="navbar-brand brand">FORM APP</a>
         <div>
@@ -68,39 +90,34 @@ MAIN_TEMPLATE = """
 <div class="container py-5">
     <div class="row justify-content-center">
         <div class="col-md-7 col-lg-5">
-            <div class="card p-4">
+            <div class="card p-5">
 
                 {% with msgs = get_flashed_messages() %}
                     {% if msgs %}
-                        <div class="alert alert-success">{{ msgs[0] }}</div>
+                        <div class="alert alert-success text-center">{{ msgs[0] }}</div>
                     {% endif %}
                 {% endwith %}
 
-                <h3 class="text-center mb-4">Napište nám</h3>
+                <h3 class="text-center mb-4" style="font-weight:700;">Napište nám</h3>
                 <form method="POST">
                     {{ form.hidden_tag() }}
-
                     <div class="mb-3">
                         {{ form.name.label(class="form-label") }}
                         {{ form.name(class="form-control", placeholder="Vaše jméno") }}
                     </div>
-
                     <div class="mb-3">
                         {{ form.email.label(class="form-label") }}
                         {{ form.email(class="form-control", placeholder="email@example.com") }}
                     </div>
-
                     <div class="mb-3">
                         {{ form.gender.label(class="form-label") }}
                         {{ form.gender(class="form-select") }}
                     </div>
-
                     <div class="mb-3">
                         {{ form.message.label(class="form-label") }}
-                        {{ form.message(class="form-control", rows=4, placeholder="Vaše zpráva...") }}
+                        {{ form.message(class="form-control", rows=5, placeholder="Vaše zpráva...") }}
                     </div>
-
-                    <button class="btn btn-primary w-100" type="submit">Odeslat</button>
+                    <button class="btn btn-primary w-100 py-2" type="submit">Odeslat</button>
                 </form>
             </div>
         </div>
@@ -111,20 +128,12 @@ MAIN_TEMPLATE = """
 """
 
 LOGIN_TEMPLATE = """
-<!doctype html>
-<html lang="cs">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Login</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body class="bg-light">
+<body class="bg-gradient-to-br" style="background: linear-gradient(135deg, #4e73df 0%, #1cc88a 100%); font-family: 'Inter', sans-serif;">
 <div class="container py-5">
     <div class="row justify-content-center">
         <div class="col-md-4">
-            <div class="card p-4 shadow-sm">
-                <h4 class="text-center mb-3">Admin Login</h4>
+            <div class="card p-4 shadow-lg" style="border-radius:20px;">
+                <h4 class="text-center mb-4" style="font-weight:700; color:#4e73df;">Admin Login</h4>
                 {% with msgs = get_flashed_messages() %}
                     {% if msgs %}
                         <div class="alert alert-danger">{{ msgs[0] }}</div>
@@ -139,38 +148,20 @@ LOGIN_TEMPLATE = """
                         <label class="form-label">Heslo</label>
                         <input type="password" name="password" class="form-control" required>
                     </div>
-                    <button class="btn btn-primary w-100">Přihlásit</button>
+                    <button class="btn btn-primary w-100 py-2" type="submit">Přihlásit</button>
                 </form>
             </div>
         </div>
     </div>
 </div>
-</body>
-</html>
 """
 
 ADMIN_TEMPLATE = """
-<!doctype html>
-<html lang="cs">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Admin</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body>
-<nav class="navbar bg-white shadow-sm mb-4">
-    <div class="container d-flex justify-content-between">
-        <a href="{{ url_for('index') }}" class="navbar-brand">← Zpět</a>
-        <a href="{{ url_for('logout') }}" class="btn btn-outline-secondary btn-sm">Odhlásit</a>
-    </div>
-</nav>
-
 <div class="container">
-    <h3 class="mb-3">Přijaté zprávy</h3>
+    <h3 class="mb-4" style="font-weight:700; color:#4e73df;">Přijaté zprávy</h3>
     {% if items %}
-        <table class="table table-hover">
-            <thead>
+        <table class="table table-hover table-striped align-middle shadow-sm" style="border-radius:10px; overflow:hidden;">
+            <thead class="table-dark">
                 <tr>
                     <th>#</th><th>Jméno</th><th>Email</th><th>Pohlaví</th><th>Zpráva</th><th></th>
                 </tr>
@@ -196,8 +187,6 @@ ADMIN_TEMPLATE = """
         <div class="alert alert-info">Žádná data.</div>
     {% endif %}
 </div>
-</body>
-</html>
 """
 
 # --- Utility ---
